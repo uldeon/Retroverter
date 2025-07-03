@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Retrovert</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/audiobuffer-to-wav@1.0.0/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/unrar-js@4.1.0/dist/unrar.min.js"></script>
@@ -12,39 +12,54 @@
   <script src="https://cdn.jsdelivr.net/npm/tar-js@0.3.0/tar.min.js"></script>
 </head>
 <body>
-  <button class="theme-toggle" onclick="toggleTheme()">Thème Clair/Sombre</button>
+  <button class="theme-toggle" onclick="toggleTheme()">🌓 Thème</button>
   <div class="container">
     <h1>Retrovert</h1>
     <div class="upload-box">
-      <label for="gameFile">Sélectionnez votre jeu (.zip, .rar, .7z, .tar, .rom):</label>
-      <input type="file" id="gameFile" />
-      <label for="console">Console cible :</label>
+      <input type="file" id="gameFile" accept=".zip,.rar,.7z,.tar" />
       <select id="console">
         <option value="nds">Nintendo DS</option>
         <option value="gba">Game Boy Advance</option>
-        <option value="psp">PlayStation Portable</option>
+        <option value="snes">Super NES</option>
         <option value="ps1">PlayStation 1</option>
         <option value="ps2">PlayStation 2</option>
+        <option value="ps3">PlayStation 3</option>
+        <option value="psp">PlayStation Portable</option>
         <option value="xbox">Xbox</option>
         <option value="xbox360">Xbox 360</option>
-        <option value="ps3">PlayStation 3</option>
         <option value="gamecube">GameCube</option>
-        <option value="snes">Super Nintendo (SNES)</option>
       </select>
-      <button onclick="convertGame()">Convertir le jeu</button>
+      <button onclick="convertGame()">Convertir</button>
+      <button onclick="downloadConverted()">📥 Télécharger</button>
     </div>
-
-    <dialog id="inputWarning">
-      <p>Le jeu demande plus de boutons que la console cible n’en a.<br/>Voulez-vous rendre les fonctions excédentaires inaccessibles ou annuler la conversion ?</p>
-      <button onclick="document.getElementById('inputWarning').close()">Annuler</button>
-      <button onclick="document.getElementById('inputWarning').close()">Rendre inaccessibles</button>
-    </dialog>
-
-    <div id="resultBox" class="result" style="display:none;">
+    <div class="result" id="resultBox" style="display:none">
       <p id="resultText"></p>
-      <button onclick="downloadConverted()">Télécharger le jeu converti</button>
     </div>
   </div>
+
+  <!-- Loader -->
+  <div id="loader" aria-live="assertive" aria-label="Chargement en cours">
+    <div>
+      <div class="loader-spinner"></div>
+      <div id="loader-message">Chargement...</div>
+    </div>
+  </div>
+
+  <!-- Popin blocage -->
+  <dialog id="blockageDialog" role="alertdialog" aria-modal="true" aria-labelledby="blockageTitle">
+    <h3 id="blockageTitle">Un problème est peut-être survenu.</h3>
+    <div id="blockageMessage">Le processus prend plus de temps que prévu.</div>
+    <button onclick="cancelConversion()">Annuler</button>
+    <button onclick="continueConversion()">Ignorer</button>
+  </dialog>
+
+  <!-- Avertissement input manquant -->
+  <dialog id="inputWarning">
+    <h3>Fonctions non supportées</h3>
+    <p>Le jeu utilise plus de boutons que la console cible ne peut en fournir.</p>
+    <button onclick="abortConversion=true;this.closest('dialog').close();">Annuler la conversion</button>
+    <button onclick="document.getElementById('inputWarning').close();">Continuer avec les fonctions essentielles</button>
+  </dialog>
 
   <script src="app.js"></script>
 </body>

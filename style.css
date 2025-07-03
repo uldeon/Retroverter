@@ -131,6 +131,7 @@ dialog {
   text-align: center;
   background: white;
   animation: popIn 0.3s ease;
+  max-width: 90vw;
 }
 
 @keyframes popIn {
@@ -141,4 +142,40 @@ dialog {
 dialog button {
   margin: 0.5rem;
   border-radius: 999px;
+}
+
+/* Loader container */
+#loader {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loader animation */
+.loader-spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid var(--accent);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loader message */
+#loader-message {
+  margin-top: 1rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-shadow: 0 0 6px #0008;
 }
